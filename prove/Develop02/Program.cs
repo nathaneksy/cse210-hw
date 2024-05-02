@@ -7,18 +7,28 @@ public class Entry
     public string Prompt { get; set; }
     public string Response { get; set; }
     public DateTime Date { get; set; }
+    public string AuthorName { get; set; } 
+    public string Location { get; set; }   
+    public string Mood { get; set; }
+    public string HungerStatus{ get; set; }
 
-    public Entry(string prompt, string response, DateTime date)
+    public Entry(string prompt, string response, DateTime date, string authorName, string location, string mood, string hungerstatus)
     {
         Prompt = prompt;
         Response = response;
         Date = date;
+        AuthorName = authorName;
+        Location = location;
+        Mood = mood;
+        HungerStatus = hungerstatus;
     }
+
     public string DisplayEntry()
     {
-        return $"Date: {Date}\nPrompt: {Prompt}\nResponse: {Response}\n";
+        return $"Date: {Date}\nPrompt: {Prompt}\nResponse: {Response}\nAuthor: {AuthorName}\nLocation: {Location}\nMood: {Mood}\nHunger Status: {HungerStatus}\n";
     }
 }
+
 public class Journal
 {
     private List<Entry> entries;
@@ -49,7 +59,7 @@ public class Journal
             {
                 foreach (var entry in entries)
                 {
-                    writer.WriteLine($"{entry.Date},{entry.Prompt},{entry.Response}");
+                    writer.WriteLine($"{entry.Date},{entry.Prompt},{entry.Response},{entry.AuthorName},{entry.Location},{entry.Mood},{entry.HungerStatus}");
                 }
             }
             Console.WriteLine("Journal saved successfully.");
@@ -64,18 +74,22 @@ public class Journal
     {
         try
         {
-            entries.Clear();
+            entries.Clear(); // Clear existing entries before loading new ones
 
             string[] lines = File.ReadAllLines(filename);
             foreach (var line in lines)
             {
                 string[] parts = line.Split(',');
-                if (parts.Length >= 3)
+                if (parts.Length >= 5)
                 {
                     DateTime date = DateTime.Parse(parts[0]);
                     string prompt = parts[1];
                     string response = parts[2];
-                    entries.Add(new Entry(prompt, response, date));
+                    string authorName = parts[3];
+                    string location = parts[4];
+                    string mood = parts [5];
+                    string hungerstatus = parts [6];
+                    entries.Add(new Entry(prompt, response, date, authorName, location, mood, hungerstatus));
                 }
             }
             Console.WriteLine("Journal loaded successfully.");
@@ -86,7 +100,6 @@ public class Journal
         }
     }
 }
-
 
 class Program
 {
@@ -124,14 +137,27 @@ class Program
                         "What was I grateful for today?",
                         "What was the funniest thing you remember from today that made you happy?",
                         "Who could have used your help today?"
-
                     };
                     Random rnd = new Random();
                     string randomPrompt = prompts[rnd.Next(prompts.Length)];
                     Console.WriteLine($"Prompt: {randomPrompt}");
+
                     Console.Write("Enter your response: ");
                     string response = Console.ReadLine();
-                    journal.AddEntry(new Entry(randomPrompt, response, DateTime.Now));
+
+                    Console.Write("Enter your name: ");
+                    string authorName = Console.ReadLine();
+
+                    Console.Write("Enter your location: ");
+                    string location = Console.ReadLine();
+
+                    Console.Write("Enter your current mood: ");
+                    string mood = Console.ReadLine();
+
+                    Console.Write("Enter your hunger status: ");
+                    string hungerstatus = Console.ReadLine();
+
+                    journal.AddEntry(new Entry(randomPrompt, response, DateTime.Now, authorName, location, mood, hungerstatus));
                     break;
                 case 2:
                     journal.DisplayEntries();
