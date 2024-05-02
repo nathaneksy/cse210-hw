@@ -7,9 +7,9 @@ public class Entry
     public string Prompt { get; set; }
     public string Response { get; set; }
     public DateTime Date { get; set; }
-    public string AuthorName { get; set; } 
-    public string Location { get; set; }   
-    public string Mood { get; set; }
+    public string AuthorName { get; set; }      // To exceed the requirements for this program I added additional information that the user must fill out.
+    public string Location { get; set; }        // For example, the name, location, mood and also hunger status options were added to improve the creativity.
+    public string Mood { get; set; }            // These answers will show up when you finish the journal entry and will be loaded in your saved file.
     public string HungerStatus{ get; set; }
 
     public Entry(string prompt, string response, DateTime date, string authorName, string location, string mood, string hungerstatus)
